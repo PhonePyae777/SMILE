@@ -10,19 +10,19 @@
 
 <link rel="apple-touch-icon" href="icon.png">
 
-<title>Mood Checker</title>
+<title>Mood Checker Pro</title>
 
 <style>
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont;
-    background: linear-gradient(135deg, #667eea, #764ba2);
+    background: radial-gradient(circle at top, #7f7fd5, #86a8e7, #91eae4);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: white;
     overflow: hidden;
+    color: white;
 }
 
 /* Splash */
@@ -30,85 +30,112 @@ body {
     position: fixed;
     width: 100%;
     height: 100%;
-    background: #667eea;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 24px;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 1px;
     animation: fadeOut 1s ease 2s forwards;
 }
 
-/* Main */
+/* Glass Card */
 .container {
     text-align: center;
     width: 90%;
-    max-width: 350px;
+    max-width: 360px;
     padding: 30px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(15px);
-    animation: slideUp 0.6s ease;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    animation: popIn 0.7s ease;
 }
 
+/* Buttons */
 button {
     width: 100%;
-    padding: 14px;
+    padding: 15px;
     margin: 10px 0;
-    border-radius: 12px;
+    border-radius: 14px;
     border: none;
     font-size: 16px;
+    font-weight: bold;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.2s ease;
 }
 
-.yes { background: #00c853; }
-.no { background: #ff1744; }
+/* Glow effect */
+.yes {
+    background: linear-gradient(135deg, #00c853, #64dd17);
+    box-shadow: 0 0 15px rgba(0,255,100,0.3);
+}
+
+.no {
+    background: linear-gradient(135deg, #ff1744, #ff5252);
+    box-shadow: 0 0 15px rgba(255,0,80,0.3);
+}
 
 button:active {
-    transform: scale(0.95);
+    transform: scale(0.96);
+    filter: brightness(1.2);
 }
 
 /* Animations */
-@keyframes slideUp {
-    from {opacity: 0; transform: translateY(40px);}
-    to {opacity: 1; transform: translateY(0);}
+@keyframes popIn {
+    from {opacity: 0; transform: scale(0.8);}
+    to {opacity: 1; transform: scale(1);}
 }
 
 @keyframes fadeOut {
     to {opacity: 0; visibility: hidden;}
+}
+
+/* Text style */
+h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- Splash Screen -->
+<!-- Splash -->
 <div id="splash">Mood Checker 💭</div>
 
-<!-- Main Page -->
+<!-- Main -->
 <div class="container" id="page1">
     <h2>Are you in a Good Mood?</h2>
     <button class="yes" onclick="showYes()">Yes 😊</button>
     <button class="no" onclick="showNo()">No 😞</button>
 </div>
 
-<!-- Yes Page -->
+<!-- Pages -->
 <div class="container" id="yesPage" style="display:none;">
-    <h2>You can work now 💪<br>Good Luck 🍀</h2>
+    <h2>💪 You can work now<br>Good Luck 🍀</h2>
 </div>
 
-<!-- No Page -->
 <div class="container" id="noPage" style="display:none;">
-    <h2>Don't work now ❌<br>Have fun first 🎮</h2>
+    <h2>🎮 Don't work now<br>Have fun first 😎</h2>
 </div>
 
-<!-- 🔊 AUDIO FILE -->
+<!-- 🔊 SOUND FILES -->
+<audio id="yesSound" preload="auto">
+    <source src="yes.mp3" type="audio/mpeg">
+</audio>
+
 <audio id="noSound" preload="auto">
     <source src="no.mp3" type="audio/mpeg">
 </audio>
 
 <script>
 function showYes() {
+    const sound = document.getElementById("yesSound");
+    sound.currentTime = 0;
+    sound.play().catch(() => {});
+
     page1.style.display = "none";
     yesPage.style.display = "block";
 }
@@ -116,9 +143,7 @@ function showYes() {
 function showNo() {
     const sound = document.getElementById("noSound");
     sound.currentTime = 0;
-    sound.play().catch(() => {
-        console.log("Audio blocked by browser");
-    });
+    sound.play().catch(() => {});
 
     page1.style.display = "none";
     noPage.style.display = "block";
